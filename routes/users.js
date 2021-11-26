@@ -1,10 +1,13 @@
 var express = require('express');
 var router = express.Router();
 const passport = require('passport');
+const util = require('util');
 
 
 const jwt = require('jsonwebtoken');
 const mysqlConnection = require('../database');
+
+const query = util.promisify(mysqlConnection.query).bind(mysqlConnection);
 
 /* GET users listing. */
 router.get('/', (req,res)=>{
@@ -16,6 +19,20 @@ router.get('/', (req,res)=>{
     }
   })
 });
+
+router.get('/:id', async (req, res, next) => {
+  const {id} = req.params;
+  //const user = await Promise.resolve(mysqlConnection.query('SELECT * FROM users WHERE id = ?', [id]));
+  console.log(`el id es ${id}`);
+  //return res.json(user);
+  try {
+    let sql = `select * from users where id = ${mysqlConnection.escape(id)}`;
+    const rows = await query(sql);
+    res.json(rows);
+  } catch (error) {
+    console.log(`Hay un error: ${error}`)
+  }
+})
 
 router.post('/singin', (req,res) => {
   const { username, password } = req.body;
