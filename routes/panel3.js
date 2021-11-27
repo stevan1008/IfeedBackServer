@@ -5,7 +5,6 @@ const passport = require('passport');
 var multer = require('multer');
 var util = require('util');
 
-
 const mysqlConnection = require('../database');
 const query = util.promisify(mysqlConnection.query).bind(mysqlConnection);
 
@@ -47,7 +46,7 @@ panelTresRouter.route('/:id')
     const updatedPanelTres = req.body;
     mysqlConnection.query('UPDATE panel_3 set ? WHERE id = ?', [updatedPanelTres, id]);
     res.json({
-        message: "Panel 1 was Succesfully Updated"
+        message: "Panel 3 was Succesfully Updated"
     })
 })
 
@@ -55,7 +54,7 @@ panelTresRouter.route('/:id')
     const id = req.params.id;
     mysqlConnection.query("DELETE FROM panel_3 WHERE id = ?", [id]);
     res.json({
-        message: "Panel1 was Deleted Succesfully"
+        message: "Panel 3 was Deleted Succesfully"
     })
 })
 

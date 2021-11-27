@@ -23,6 +23,14 @@ panelUnoRouter.route('/')
     })
 })
 
+.put((req, res) => {
+    const updatePanel = req.bodyl;
+    mysqlConnection.query('UPDATE panel_1 SET ?', [updatePanel]);
+    res.json(
+        {message: "Panel 1 was updated"}
+    )
+})
+
 .post((req, res) => {
     const newPanel1 = req.body;
     mysqlConnection.query('INSERT INTO panel_1 SET ?', [newPanel1]);

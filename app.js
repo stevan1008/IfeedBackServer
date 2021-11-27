@@ -34,11 +34,10 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/config', configRouter);
 app.use('/panels', panelesRouter);
-app.use('/conference', conferencistasRouter);
 app.use('/firstpanel', panelUnoRouter);
 app.use('/secondpanel', panelDosRouter);
-app.use('./thirdpanel', panelTresRouter);
-app.use('./fourthpanel', panelCuatroRouter);
+app.use('/thirdpanel', panelTresRouter);
+app.use('/fourthpanel', panelCuatroRouter);
 app.use('/fifthpanel', panelCincoRouter);
 
 // catch 404 and forward to error handler
