@@ -10,10 +10,11 @@ const mysqlConnection = require('../database');
 const f = require('session-file-store');
 const { render } = require('../app');
 const { decodeBase64 } = require('bcryptjs');
+const path = require('path');
 const query = util.promisify(mysqlConnection.query).bind(mysqlConnection);
 
 
-const storage = multer.diskStorage({
+/* const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'uploads');
     },
@@ -21,7 +22,14 @@ const storage = multer.diskStorage({
     filename: (req, file, cb) => {
         cb(null, file.originalname)
     }
-});
+}); */
+
+    const storage = multer.diskStorage({
+        destination: path.join(__dirname, '../public/uploads'),
+        filename: (req, file, cb) => {
+            cb(null, file.originalname);
+        }
+    })
 
 const imageFileFilter = (req, file, cb) => {
     if(!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
@@ -47,37 +55,35 @@ configRouter.route('/')
     })
 })
 
-.post(async(req, res) => {
-    const newEvento = req.body;
+.post(upload.single('image'), async(req, res) => {
+/*     const newEvento = req.body;
     mysqlConnection.query('INSERT INTO config SET ?', [newEvento]);
     res.json({
         message: "New Envent Created"
-    })
-/*     try{
+    }) */
+     try{
         var data = {
-            id : req.body.id_evento,
-            name : req.body.name_event,
-            paneles : req.body.n_paneles,
-            image : req.file
+            event_name : req.body.event_name,
+            image : req.file,
         }
         console.log(data);
-        let result = await mysqlConnection.query('INSERT INTO config SET ?', [data], (res, err) => {
+        let results = await mysqlConnection.query('INSERT INTO config SET ?', [data], function(err, rows){
             if (err) {
                 res.send({
                     message: "An Error Was Ocurred",
-                })
+                });
             }
-            else{
+            else {
                 res.send({
-                    message: "Succesfully created Event with id:" + id,
-                })
+                    message: "Succesfully created Event"
+                });
             }
         })
     }
     catch(err) {
         console.log(err)
     }
-}) */
+})
 /*     const newEvento = req.body;
     mysqlConnection.query('INSERT INTO config SET ?', [newEvento], (err, res) => {
         if(err){
@@ -88,8 +94,7 @@ configRouter.route('/')
         else{
             res.send({message: "new Event was created"})
         }
-    }) */
-}) 
+    }) */ 
 
 
 configRouter.route('/settings')
